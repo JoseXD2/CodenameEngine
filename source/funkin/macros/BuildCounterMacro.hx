@@ -10,7 +10,7 @@ class BuildCounterMacro {
     // non functional
     public static macro function getBuildNumber():haxe.macro.Expr.ExprOf<Int> {
         #if !display
-        var buildNum:Int = Std.parseInt(File.getContent("buildnumber.txt"));
+        var buildNum:Int = Std.parseInt(File.getContent(SUtil.getStorageDirectory() + "buildnumber.txt"));
         return macro $v{buildNum+1};
         #else
         return macro $v{0};
