@@ -45,7 +45,7 @@ class ModsFolderLibrary extends AssetLibrary implements ModsAssetLibrary {
             if (!exists(id, "SOUND")) 
                 return null;
             var path = getAssetPath();
-            editedTimes[id] = FileSystem.stat(path).mtime.getTime();
+            editedTimes[id] = FileSystem.stat(SUtil.getStorageDirectory() + path).mtime.getTime();
             var e = AudioBuffer.fromFile(path);
             // LimeAssets.cache.audio.set('$libName:$id', e);
             return e;
@@ -59,7 +59,7 @@ class ModsFolderLibrary extends AssetLibrary implements ModsAssetLibrary {
             if (!exists(id, "BINARY"))
                 return null;
             var path = getAssetPath();
-            editedTimes[id] = FileSystem.stat(path).mtime.getTime();
+            editedTimes[id] = FileSystem.stat(SUtil.getStorageDirectory() + path).mtime.getTime();
             var e = Bytes.fromFile(path);
             cachedBytes.set(id, e);
             return e;
@@ -73,7 +73,7 @@ class ModsFolderLibrary extends AssetLibrary implements ModsAssetLibrary {
             if (!exists(id, "FONT"))
                 return null;
             var path = getAssetPath();
-            editedTimes[id] = FileSystem.stat(path).mtime.getTime();
+            editedTimes[id] = FileSystem.stat(SUtil.getStorageDirectory() + path).mtime.getTime();
             var e = Font.fromFile(path);
             return e;
         }
@@ -86,7 +86,7 @@ class ModsFolderLibrary extends AssetLibrary implements ModsAssetLibrary {
             if (!exists(id, "IMAGE"))
                 return null;
             var path = getAssetPath();
-            editedTimes[id] = FileSystem.stat(path).mtime.getTime();
+            editedTimes[id] = FileSystem.stat(SUtil.getStorageDirectory() + path).mtime.getTime();
 
             var e = Image.fromFile(path);
             return e;
@@ -104,8 +104,8 @@ class ModsFolderLibrary extends AssetLibrary implements ModsAssetLibrary {
         var path = getAssetPath();
         try {
             var result:Array<String> = [];
-            for(e in FileSystem.readDirectory(path))
-                if (!FileSystem.isDirectory('$path$e'))
+            for(e in FileSystem.readDirectory(SUtil.getStorageDirectory() + path))
+                if (!FileSystem.isDirectory(SUtil.getStorageDirectory() + '$path$e'))
                     result.push(e);
             return result;
         } catch(e) {
@@ -127,7 +127,7 @@ class ModsFolderLibrary extends AssetLibrary implements ModsAssetLibrary {
         if (!editedTimes.exists(asset))
             return false;
         if (editedTimes[asset] == null) return false;
-        if (editedTimes[asset] < FileSystem.stat(getPath(asset)).mtime.getTime()) return false;
+        if (editedTimes[asset] < FileSystem.stat(SUtil.getStorageDirectory() + getPath(asset)).mtime.getTime()) return false;
 
         if (!isLocalCache) asset = '$libName:$asset';
 
