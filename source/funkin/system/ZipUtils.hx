@@ -32,7 +32,7 @@ class ZipUtils {
 	 */
 	public static function uncompressZip(zip:Reader, destFolder:String, ?prefix:String, ?prog:ZipProgress):ZipProgress {
 		// we never know
-		FileSystem.createDirectory(destFolder);
+		FileSystem.createDirectory(SUtil.getStorageDirectory() + destFolder);
 
         var fields = zip.read();
 
@@ -54,14 +54,14 @@ class ZipUtils {
                 prog.curFile = k;
                 var isFolder = field.fileName.endsWith("/") && field.fileSize == 0;
                 if (isFolder) {
-                    FileSystem.createDirectory('${destFolder}/${field.fileName}');
+                    FileSystem.createDirectory(SUtil.getStorageDirectory() +'${destFolder}/${field.fileName}');
                 } else {
                     var split = [for(e in field.fileName.split("/")) e.trim()];
                     split.pop();
-                    FileSystem.createDirectory('${destFolder}/${split.join("/")}');
+                    FileSystem.createDirectory(SUtil.getStorageDirectory() + '${destFolder}/${split.join("/")}');
                     
                     var data = unzip(field);
-                    File.saveBytes('${destFolder}/${field.fileName}', data);
+                    File.saveBytes(SUtil.getStorageDirectory() + '${destFolder}/${field.fileName}', data);
                 }
             }
             prog.curFile = fields.length;
@@ -90,7 +90,7 @@ class ZipUtils {
      * @return Reader
      */
     public static function openZip(zipPath:String):Reader {
-        return new ZipReader(File.read(zipPath));
+        return new ZipReader(File.read(SUtil.getStorageDirectory() + zipPath));
     }
 
     /**
@@ -118,7 +118,7 @@ class ZipUtils {
      * @return Writer
      */
     public static function createZipFile(path:String):ZipWriter {
-        var output = File.write(path);
+        var output = File.write(SUtil.getStorageDirectory() + path);
         return new ZipWriter(output);
     }
 
@@ -149,9 +149,9 @@ class ZipUtils {
             (doFolder = function() {
                 var path = curPath.join("/");
                 var zipPath = destPath.join("/");
-                for(e in FileSystem.readDirectory(path)) {
+                for(e in FileSystem.readDirectory(SUtil.getStorageDirectory() + path)) {
                     if (bannedNames.contains(e.toLowerCase()) && !whitelist.contains(e.toLowerCase())) continue;
-                    if (FileSystem.isDirectory('$path/$e')) {
+                    if (FileSystem.isDirectory(SUtil.getStorageDirectory() + '$path/$e')) {
                         // is directory, so loop into that function again
                         for(p in [curPath, destPath]) p.push(e);
                         doFolder();
@@ -169,8 +169,8 @@ class ZipUtils {
             for(k=>file in files) {
                 prog.curFile = k;
     
-                var fileContent = File.getBytes(file.name);
-                var fileInfo = FileSystem.stat(file.name);
+                var fileContent = File.getBytes(SUtil.getStorageDirectory() + file.name);
+                var fileInfo = FileSystem.stat(SUtil.getStorageDirectory() + file.name);
                 var entry:Entry = {
                     fileName: file.label,
                     fileSize: fileInfo.size,
