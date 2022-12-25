@@ -165,11 +165,9 @@ class Paths
 
 	inline static public function font(key:String)
 	{
-		#if sys
-		return sys.FileSystem.absolutePath(OpenFlAssets.getPath(getPath('fonts/$key', FONT, null)));
-		#else
-		return getPath('fonts/$key', FONT, null);
-		#end
+		
+		return OpenFlAssets.getPath('fonts/$key', FONT, null);
+		
 	}
 
 	inline static public function obj(key:String) {
