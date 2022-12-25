@@ -56,7 +56,7 @@ class ModsFolder {
         #if MOD_SUPPORT
         if (mod == null) return null; // may be loading base game
 
-        if (FileSystem.exists('${modsPath}$mod.zip'))
+        if (FileSystem.exists(SUtil.getStorageDirectory() + '${modsPath}$mod.zip'))
             return loadedMods[mod] = loadLibraryFromZip('mods/$mod'.toLowerCase(), '${modsPath}$mod.zip', force);
         else
             return loadedMods[mod] = loadLibraryFromFolder('mods/$mod'.toLowerCase(), '${modsPath}$mod', force);
