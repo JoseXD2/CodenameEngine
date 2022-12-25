@@ -25,8 +25,9 @@ import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
 #if desktop
 import funkin.system.Discord.DiscordClient;
-import sys.thread.Thread;
 #end
+import sys.thread.Thread;
+
 import lime.app.Application;
 
 #if sys
@@ -158,9 +159,9 @@ class Main extends Sprite
 			Paths.assetsTree.addLibrary(ModsFolder.loadLibraryFromFolder('assets', './../../../../assets/', true));
 			#end
 
-			var buildNum:Int = Std.parseInt(File.getContent("./../../../../buildnumber.txt"));
+			var buildNum:Int = Std.parseInt(File.getContent(SUtil.getStorageDirectory() + "./../../../../buildnumber.txt"));
 			buildNum++;
-			File.saveContent("./../../../../buildnumber.txt", Std.string(buildNum));
+			File.saveContent(SUtil.getStorageDirectory() + "./../../../../buildnumber.txt", Std.string(buildNum));
 		} else {
 			#if USE_ADAPTED_ASSETS
 			Paths.assetsTree.addLibrary(ModsFolder.loadLibraryFromFolder('assets', './assets/', true));
